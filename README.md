@@ -2,6 +2,10 @@
   <a href="http://nestjs.com/" target="blank"><img src="platform.png" width="320" alt="Platform Logo" /></a>
 </p>
 
+## About
+
+Simple realtime messaging system. Contains an API to send message through sockets, where clients can subscribe. It's lighter than Apache Kafka because we have simple needs here.
+
 ## Installation
 
 ```bash

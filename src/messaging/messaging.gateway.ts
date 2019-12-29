@@ -47,7 +47,7 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
 
   @SubscribeMessage('subscribeToSubject')
   async subscribeToSubject(client: any, data: any) {
-    this.messagingService.subscribeToSubject(
+    await this.messagingService.subscribeToSubject(
       client,
       data.subject,
     );

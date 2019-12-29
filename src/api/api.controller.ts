@@ -6,7 +6,10 @@ import { AuthGuard } from '../@shared/auth-shared/auth.guard';
 @Controller('api')
 export class ApiController {
 
-  constructor(private readonly messagingService: MessagingService) {}
+  constructor(private readonly messagingService: MessagingService) {
+    // Send pending messages on startup
+    this.messagingService.sendPendingMessages();
+  }
 
   /**
    * Main post method. Thi smethod is protected with the AuthGuard
@@ -14,20 +17,28 @@ export class ApiController {
    */
   @Post()
   @UseGuards(AuthGuard)
-  sendMessage(@Req() request: any): IApiResponse|IApiError {
+  async sendMessage(@Req() request: any): Promise<IApiResponse|IApiError> {
+    // Validate request
     if (!isIApiRequest(request.body)) {
       return {
         error: 'Not a valid request.',
-        sent: false,
+        status: false,
       };
     }
 
+    // Register message to the queue
+    await this.messagingService.registerMessage(
+      request.body.to,
+      request.body.subject,
+      request.body.message,
+    );
+
+    // Send pending messages
+    await this.messagingService.sendPendingMessages();
+
     return {
-      sent: this.messagingService.sendMessage(
-        request.body.to,
-        request.body.subject,
-        request.body.message,
-      ),
+      status: true,
+      original: request.body,
     };
   }
 }
@@ -46,14 +57,18 @@ export function isIApiRequest(toBeDetermined: any): toBeDetermined is IApiReques
 
 export interface IApiRequest {
   to: number[]|'*';
-  subject: string|'*';
+  subject: string;
   message: any;
 }
 
-export interface IApiResponse {
-  sent: boolean;
+export interface IApiBaseResponse {
+  status: boolean;
 }
 
-export interface IApiError extends IApiResponse {
+export interface IApiResponse extends IApiBaseResponse {
+  original: IApiRequest;
+}
+
+export interface IApiError extends IApiBaseResponse {
   error: string;
 }

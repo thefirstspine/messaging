@@ -81,7 +81,7 @@ export class MessagingService {
   }
 
   async sendPendingMessages() {
-    const messages: Message[] = await this.messageRepository.find({sent: false});
+    const messages: Message[] = await this.messageRepository.find({where: {sent: false}, take: 100, order: {message_id: 'DESC'}});
     const sentIds: number[] = messages.map((pendingMessage: Message) => {
       const to: number[]|'*' = JSON.parse(pendingMessage.to);
       const subject: string = pendingMessage.subject;

@@ -24,14 +24,17 @@
     "@nestjs/platform-express": "^6.10.12",
     "@nestjs/platform-socket.io": "^6.10.12",
     "@nestjs/platform-ws": "^6.10.12",
+    "@nestjs/typeorm": "^6.2.0",
     "@nestjs/websockets": "^6.10.12",
     "@types/dotenv": "^6.1.1",
     "@types/node-fetch": "^2.5.0",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0",
+    "pg": "^7.16.1",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
-    "rxjs": "^6.3.3"
+    "rxjs": "^6.3.3",
+    "typeorm": "^0.2.22"
   },
   "devDependencies": {
     "@nestjs/testing": "^6.0.0",

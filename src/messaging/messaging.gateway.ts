@@ -35,8 +35,6 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
       client,
       user,
       subjects: [
-        MessagingService.SUBJECT__NOTICES,
-        MessagingService.SUBJECT__TECHNICAL,
       ],
     });
 

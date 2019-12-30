@@ -7,9 +7,6 @@ import { Repository } from 'typeorm';
 @Injectable()
 export class MessagingService {
 
-  static readonly SUBJECT__TECHNICAL: string = 'Technical';
-  static readonly SUBJECT__NOTICES: string = 'Notices';
-
   constructor(
     @InjectRepository(Message)
     private readonly messageRepository: Repository<Message>,
@@ -53,7 +50,9 @@ export class MessagingService {
   async subscribeToSubject(client: IClientMessaging, subject: string) {
     this.messagingUsers.forEach((e) => {
       if (e.client === client) {
-        e.subjects.push(subject);
+        if (!e.subjects.includes(subject)) {
+          e.subjects.push(subject);
+        }
       }
     });
     await this.sendPendingMessages();

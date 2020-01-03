@@ -1,7 +1,7 @@
 import { Controller, UseGuards, Post, Req } from '@nestjs/common';
 import { MessagingService } from '../messaging/messaging.service';
 import { isString, isArray } from 'util';
-import { AllowedUsersGuard } from 'src/allowed-users.guard';
+import { AllowedUsersGuard } from '../allowed-users.guard';
 
 @Controller('api')
 export class ApiController {

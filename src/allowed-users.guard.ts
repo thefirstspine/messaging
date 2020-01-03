@@ -1,17 +1,37 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
-import { Observable } from 'rxjs';
 import env from './@shared/env-shared/env';
+import fetch, { Response } from 'node-fetch';
 
 @Injectable()
 /**
  * Only allow some users
  */
 export class AllowedUsersGuard implements CanActivate {
-  canActivate(
+
+  async canActivate(
     context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  ): Promise<boolean> {
+    // Check the bearer JSON token
+    if (
+      !context.switchToHttp().getRequest().headers ||
+      !context.switchToHttp().getRequest().headers.authorization
+    ) {
+      return false;
+    }
+
+    // Get user ID from bearer token
+    const response: Response = await fetch(env.config.AUTH_INTERNAL_URL + '/api/me', {
+      headers: {
+        Authorization: context.switchToHttp().getRequest().headers.authorization,
+      },
+    });
+    const jsonResponse = await response.json();
+    if (!jsonResponse.user_id) {
+      return false;
+    }
+
     // Get required data
-    const user: string = context.switchToHttp().getRequest().user;
+    const user: string = `${jsonResponse.user_id}`;
     const allowedUsers: string[] = env.config.MESSAGING_ALLOWED_USERS ? env.config.MESSAGING_ALLOWED_USERS.split(',' ) : null;
 
     // Check data exitence
@@ -19,7 +39,7 @@ export class AllowedUsersGuard implements CanActivate {
       return false;
     }
 
-    // Return value
+    // Guard return
     return allowedUsers.includes(user);
   }
 }

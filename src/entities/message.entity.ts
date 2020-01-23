@@ -13,7 +13,7 @@ export class Message {
   @Column({length: 250})
   subject: string;
 
-  @Column({length: 1024})
+  @Column({type: 'text', nullable: true})
   message: string;
 
   @Column({default: false})

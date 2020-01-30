@@ -20,7 +20,7 @@ export class AllowedUsersGuard implements CanActivate {
     }
 
     // Get user ID from bearer token
-    const response: Response = await fetch(env.config.AUTH_INTERNAL_URL + '/api/me', {
+    const response: Response = await fetch(env.config.AUTH_URL + '/api/me', {
       headers: {
         Authorization: context.switchToHttp().getRequest().headers.authorization,
       },
@@ -32,7 +32,7 @@ export class AllowedUsersGuard implements CanActivate {
 
     // Get required data
     const user: string = `${jsonResponse.user_id}`;
-    const allowedUsers: string[] = env.config.MESSAGING_ALLOWED_USERS ? env.config.MESSAGING_ALLOWED_USERS.split(',' ) : null;
+    const allowedUsers: string[] = env.config.ALLOWED_USERS ? env.config.ALLOWED_USERS.split(',' ) : null;
 
     // Check data exitence
     if (!user || !allowedUsers) {

@@ -6,6 +6,6 @@ import env from './@shared/env-shared/env';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useWebSocketAdapter(new WsAdapter(app));
-  await app.listen(env.dist ? env.config.MESSAGING_PORT : 2205);
+  await app.listen(env.dist ? env.config.PORT : 2205);
 }
 bootstrap();

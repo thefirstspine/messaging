@@ -5,6 +5,7 @@ import { AuthService } from './@shared/auth-shared/auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import env from './@shared/env-shared/env';
 import { MessagingModule } from './messaging/messaging.module';
+import { IndexController } from './index/index.controller';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { MessagingModule } from './messaging/messaging.module';
       database: env.config.PG_DATABASE,
     }),
   ],
-  controllers: [ApiController],
+  controllers: [ApiController, IndexController],
   providers: [AuthService, MessagingGateway],
 })
 export class AppModule {}

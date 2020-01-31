@@ -6,6 +6,7 @@ import env from './@shared/env-shared/env';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.useWebSocketAdapter(new WsAdapter(app));
+  app.enableCors();
   await app.listen(env.dist ? env.config.PORT : 2205);
 }
 bootstrap();

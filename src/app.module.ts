@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import env from './@shared/env-shared/env';
 import { MessagingModule } from './messaging/messaging.module';
 import { IndexController } from './index/index.controller';
+import { LogService } from './@shared/log-shared/log.service';
 
 @Module({
   imports: [
@@ -22,6 +23,10 @@ import { IndexController } from './index/index.controller';
     }),
   ],
   controllers: [ApiController, IndexController],
-  providers: [AuthService, MessagingGateway],
+  providers: [
+    AuthService,
+    MessagingGateway,
+    {provide: LogService, useValue: new LogService('messaging')},
+  ],
 })
 export class AppModule {}

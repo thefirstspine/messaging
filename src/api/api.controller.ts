@@ -1,7 +1,7 @@
 import { Controller, UseGuards, Post, Req } from '@nestjs/common';
 import { MessagingService } from '../messaging/messaging.service';
 import { isString, isArray } from 'util';
-import { AllowedUsersGuard } from '../allowed-users.guard';
+import { CertificateGuard } from 'src/certificate.guard';
 
 @Controller('api')
 export class ApiController {
@@ -12,11 +12,11 @@ export class ApiController {
   }
 
   /**
-   * Main post method. This method is protected with the AuthGuard & the AllowedUsersGuard
+   * Main post method. This method is protected with the CertificateGuard
    * @param body
    */
   @Post()
-  @UseGuards(AllowedUsersGuard)
+  @UseGuards(CertificateGuard)
   async sendMessage(@Req() request: any): Promise<IApiResponse|IApiError> {
     // Validate request
     if (!isIApiRequest(request.body)) {

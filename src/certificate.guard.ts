@@ -41,7 +41,7 @@ export class CertificateGuard implements CanActivate {
 
     // Get the key pairs
     const publicKeyStr: string = Buffer.from(context.switchToHttp().getRequest().headers['x-client-cert'], 'base64').toString();
-    const privateKeyStr: string = env.config.PRIVATE_KEY;
+    const privateKeyStr: string = env.config.PRIVATE_KEY.replace(/\\n/gm, '\n');
 
     try {
       // Create the challenge

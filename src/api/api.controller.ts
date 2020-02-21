@@ -1,7 +1,7 @@
 import { Controller, UseGuards, Post, Req } from '@nestjs/common';
 import { MessagingService } from '../messaging/messaging.service';
 import { isString, isArray } from 'util';
-import { CertificateGuard } from 'src/certificate.guard';
+import { CertificateGuard } from '../certificate.guard';
 
 @Controller('api')
 export class ApiController {

@@ -1,11 +1,11 @@
 import { Module, DynamicModule } from '@nestjs/common';
 import { ApiController } from './api/api.controller';
 import { MessagingGateway } from './messaging/messaging.gateway';
-import { AuthService } from './@shared/auth-shared/auth.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MessagingModule } from './messaging/messaging.module';
 import { IndexController } from './index/index.controller';
 import { LogService } from './@shared/log-shared/log.service';
+import { AuthService } from '@thefirstspine/auth-nest';
 
 @Module({})
 export class AppModule {

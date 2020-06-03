@@ -4,8 +4,8 @@ import { MessagingGateway } from './messaging/messaging.gateway';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MessagingModule } from './messaging/messaging.module';
 import { IndexController } from './index/index.controller';
-import { LogService } from './@shared/log-shared/log.service';
 import { AuthService } from '@thefirstspine/auth-nest';
+import { LogsService } from '@thefirstspine/logs-nest';
 
 @Module({})
 export class AppModule {
@@ -29,7 +29,7 @@ export class AppModule {
       providers: [
         AuthService,
         MessagingGateway,
-        {provide: LogService, useValue: new LogService('messaging')},
+        LogsService,
       ],
     };
   }

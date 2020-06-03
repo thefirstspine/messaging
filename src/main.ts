@@ -2,7 +2,7 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { WsAdapter } from '@nestjs/platform-ws';
 import { ErrorFilter } from './error.filter';
-import { LogService } from './@shared/log-shared/log.service';
+import { LogsService } from '@thefirstspine/logs-nest';
 
 async function bootstrap() {
   // Load dotenv config
@@ -12,7 +12,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule.register());
   app.useWebSocketAdapter(new WsAdapter(app));
   app.enableCors();
-  app.useGlobalFilters(new ErrorFilter(new LogService('messaging')));
+  app.useGlobalFilters(new ErrorFilter(new LogsService()));
   await app.listen(process.env.PORT);
 }
 bootstrap();

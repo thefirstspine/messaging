@@ -6,7 +6,7 @@ import {
   OnGatewayConnection,
 } from '@nestjs/websockets';
 import { MessagingService } from '../messaging/messaging.service';
-import { AuthService } from '../@shared/auth-shared/auth.service';
+import { AuthService } from '@thefirstspine/auth-nest';
 
 @WebSocketGateway()
 export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -26,7 +26,7 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
 
   @SubscribeMessage('login')
   async login(client: any, data: any) {
-    const user: number|null = await this.authService.login(data.jwt);
+    const user: number|null = await this.authService.me(data.jwt);
     if (!user) {
       throw new WsException('Invalid credentials.');
     }

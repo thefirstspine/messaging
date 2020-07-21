@@ -8,7 +8,6 @@ services:
     networks:
       default:
     volumes:
-      - ${DATA}:/data/
       - /var/log:/var/log
     ports:
       - "${PORT}:${PORT}"

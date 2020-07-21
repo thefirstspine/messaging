@@ -7,8 +7,6 @@ import { CertificateGuard } from '@thefirstspine/certificate-nest';
 export class ApiController {
 
   constructor(private readonly messagingService: MessagingService) {
-    // Send pending messages on startup
-    this.messagingService.sendPendingMessages();
   }
 
   /**
@@ -17,7 +15,7 @@ export class ApiController {
    */
   @Post()
   @UseGuards(CertificateGuard)
-  async sendMessage(@Req() request: any): Promise<IApiResponse|IApiError> {
+  sendMessage(@Req() request: any): IApiResponse|IApiError {
     // Validate request
     if (!isIApiRequest(request.body)) {
       return {
@@ -26,15 +24,11 @@ export class ApiController {
       };
     }
 
-    // Register message to the queue
-    await this.messagingService.registerMessage(
-      request.body.to,
-      request.body.subject,
-      request.body.message,
-    );
-
     // Send pending messages
-    await this.messagingService.sendPendingMessages();
+    this.messagingService.sendMessageToClient(
+      (request.body as IApiRequest).to,
+      (request.body as IApiRequest).subject,
+      (request.body as IApiRequest).message);
 
     return {
       status: true,

@@ -33,7 +33,7 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
 
     this.messagingService.addUser({
       client,
-      user,
+      user: parseInt(user.toString(10), 10), // force to integer
       subjects: [
       ],
     });

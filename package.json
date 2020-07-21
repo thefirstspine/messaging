@@ -33,11 +33,9 @@
     "@types/node-fetch": "^2.5.5",
     "dotenv": "^8.2.0",
     "node-fetch": "^2.6.0",
-    "pg": "^7.18.2",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
     "rxjs": "^6.5.5",
-    "typeorm": "^0.2.24",
     "winston": "^3.2.1"
   },
   "devDependencies": {

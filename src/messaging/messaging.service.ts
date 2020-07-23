@@ -1,16 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { isArray } from 'util';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Message } from '../entities/message.entity';
-import { Repository } from 'typeorm';
 
 @Injectable()
 export class MessagingService {
-
-  constructor(
-    @InjectRepository(Message)
-    private readonly messageRepository: Repository<Message>,
-  ) {}
 
   /**
    * The registered users
@@ -47,7 +39,7 @@ export class MessagingService {
    * @param client
    * @param subject
    */
-  async subscribeToSubject(client: IClientMessaging, subject: string) {
+  subscribeToSubject(client: IClientMessaging, subject: string) {
     this.messagingUsers.forEach((e) => {
       if (e.client === client) {
         if (!e.subjects.includes(subject)) {
@@ -55,7 +47,6 @@ export class MessagingService {
         }
       }
     });
-    await this.sendPendingMessages();
   }
 
   /**
@@ -69,27 +60,6 @@ export class MessagingService {
         e.subjects = e.subjects.filter(s => s !== subject);
       }
     });
-  }
-
-  async registerMessage(to: number[]|'*', subject: string, message: any) {
-    await this.messageRepository.insert({
-      message: JSON.stringify(message),
-      subject,
-      to: JSON.stringify(to),
-    });
-  }
-
-  async sendPendingMessages() {
-    const messages: Message[] = await this.messageRepository.find({where: {sent: false}, take: 100, order: {message_id: 'DESC'}});
-    const sentIds: number[] = messages.map((pendingMessage: Message) => {
-      const to: number[]|'*' = JSON.parse(pendingMessage.to);
-      const subject: string = pendingMessage.subject;
-      const message: any = JSON.parse(pendingMessage.message);
-      return this.sendMessageToClient(to, subject, message) ? pendingMessage.message_id : -1;
-    }).filter((id) => id > 0);
-    if (sentIds.length > 0) {
-      await this.messageRepository.update(sentIds, {sent: true});
-    }
   }
 
   /**

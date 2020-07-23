@@ -1,23 +1,6 @@
 version: "3.2"
 
 services:
-  messaging_postgres:
-    image: postgres:11
-    container_name: thefirstspine_messaging_postgres_container
-    networks:
-      default:
-        ipv4_address: ${PG_HOST}
-    volumes:
-      - ${PG_DATA}:/var/lib/postgresql/data
-      - /var/log:/var/log
-    ports:
-      - "${PG_PORT}:${PG_PORT}"
-    tty: true
-    environment:
-      - POSTGRES_USER=${PG_USERNAME}
-      - POSTGRES_PASSWORD=${PG_PASSWORD}
-      - POSTGRES_DB=${PG_DATABASE}
-    command: -p ${PG_PORT}
   messaging:
     build: 'messaging'
     image: thefirstspine_messaging_image
@@ -25,19 +8,13 @@ services:
     networks:
       default:
     volumes:
-      - ${DATA}:/data/
       - /var/log:/var/log
     ports:
       - "${PORT}:${PORT}"
     tty: true
     env_file:
       - .env
-    depends_on:
-      - messaging_postgres
 
 networks:
   default:
     driver: bridge
-    ipam:
-      config:
-        - subnet: ${NETWORK_SUBNET}

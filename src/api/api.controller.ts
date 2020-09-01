@@ -2,12 +2,15 @@ import { Controller, UseGuards, Post, Req } from '@nestjs/common';
 import { MessagingService } from '../messaging/messaging.service';
 import { isString, isArray } from 'util';
 import { CertificateGuard } from '@thefirstspine/certificate-nest';
+import { LogsService } from '@thefirstspine/logs-nest';
 
 @Controller('api')
 export class ApiController {
 
-  constructor(private readonly messagingService: MessagingService) {
-  }
+  constructor(
+    private readonly messagingService: MessagingService,
+    private readonly logService: LogsService,
+  ) {}
 
   /**
    * Main post method. This method is protected with the CertificateGuard
@@ -23,6 +26,8 @@ export class ApiController {
         status: false,
       };
     }
+
+    this.logService.info('Recieved request', request.body);
 
     // Send pending messages
     this.messagingService.sendMessageToClient(

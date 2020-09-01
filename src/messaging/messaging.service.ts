@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { isArray } from 'util';
+import { LogsService } from '@thefirstspine/logs-nest';
 
 @Injectable()
 export class MessagingService {
@@ -8,6 +9,10 @@ export class MessagingService {
    * The registered users
    */
   protected messagingUsers: IMessagingUser[] = [];
+
+  constructor(
+    private readonly logService: LogsService,
+  ) {}
 
   /**
    * Add a user the the messaging service
@@ -75,11 +80,13 @@ export class MessagingService {
         users.includes(messagingUser.user) &&
         messagingUser.subjects.includes(subject)
       ) {
-        messagingUser.client.send(JSON.stringify({
+        const messageToSend = {
           to,
           subject,
           message,
-        }));
+        };
+        this.logService.info('Send message', messageToSend);
+        messagingUser.client.send(JSON.stringify(messageToSend));
         hadSentMessage = true;
       }
     });

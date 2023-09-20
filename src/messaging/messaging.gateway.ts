@@ -7,6 +7,7 @@ import {
 } from '@nestjs/websockets';
 import { MessagingService } from '../messaging/messaging.service';
 import { AuthService } from '@thefirstspine/auth-nest';
+import { LogsService } from '@thefirstspine/logs-nest';
 
 @WebSocketGateway()
 export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnect {
@@ -14,18 +15,21 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
   constructor(
     private readonly authService: AuthService,
     private readonly messagingService: MessagingService,
+    private readonly logsService: LogsService,
   ) {}
 
   async handleConnection(client: any) {
-    // Don't do anyting
+    this.logsService.info(`New client connected`, {});
   }
 
   async handleDisconnect(client: any) {
     this.messagingService.removeClient(client);
+    this.logsService.info(`Client disconnected`, {});
   }
 
   @SubscribeMessage('login')
   async login(client: any, data: any) {
+    this.logsService.info(`Login sent`, {});
     const user: number|null = await this.authService.me(data.jwt);
     if (!user) {
       throw new WsException('Invalid credentials.');
@@ -45,6 +49,7 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
 
   @SubscribeMessage('subscribeToSubject')
   async subscribeToSubject(client: any, data: any) {
+    this.logsService.info(`subscribeToSubject sent`, data);
     await this.messagingService.subscribeToSubject(
       client,
       data.subject,
@@ -56,6 +61,7 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
 
   @SubscribeMessage('unsubscribeToSubject')
   async unsubscribeToSubject(client: any, data: any) {
+    this.logsService.info(`unsubscribeToSubject sent`, data);
     this.messagingService.unsubscribeToSubject(
       client,
       data.subject,

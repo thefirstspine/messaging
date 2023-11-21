@@ -12,7 +12,10 @@ export class ErrorFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    const status = exception.getStatus();
+    let status = 0;
+    try {
+      status = exception.getStatus()
+    } catch (e) {}
     if (status >= 500) {
       this.logsService.error(
         `Global error with status ${status}`, {

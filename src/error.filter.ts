@@ -12,7 +12,7 @@ export class ErrorFilter implements ExceptionFilter {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const request = ctx.getRequest<Request>();
-    let status = 0;
+    let status = 500;
     try {
       status = exception.getStatus()
     } catch (e) {}

@@ -27,7 +27,7 @@
     "@nestjs/typeorm": "^10.0.1",
     "@nestjs/websockets": "^10.2.10",
     "@thefirstspine/auth-nest": "^2.4.4",
-    "@thefirstspine/certificate-nest": "1.0.2",
+    "@thefirstspine/certificate-nest": "1.0.3",
     "@thefirstspine/logs-nest": "^6.0.0",
     "axios": "^1.6.2",
     "dotenv": "^16.3.1",

@@ -45,4 +45,4 @@ jobs:
           docker build -t thefirstspine/ansible .
       - name: Run thefirstspine/ansible image
         run: |
-          docker run --rm -v ./volume:/volume thefirstspine/ansible ansible-playbook -i /volume/conf/inventory.yaml /volume/playbooks/deploy-messaging.yaml
+          docker run --rm -v ./volume:/volume -e BRANCH=${GITHUB_REF#refs/*/} thefirstspine/ansible ansible-playbook -i /volume/conf/inventory.yaml /volume/playbooks/deploy-messaging.yaml

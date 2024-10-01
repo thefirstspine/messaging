@@ -16,7 +16,9 @@ export class MessagingGateway implements OnGatewayConnection, OnGatewayDisconnec
     private readonly authService: AuthService,
     private readonly messagingService: MessagingService,
     private readonly logsService: LogsService,
-  ) {}
+  ) {
+    this.logsService.info(`Ready to listen for connections`, {});
+  }
 
   async handleConnection(client: any) {
     this.logsService.info(`New client connected`, {});

@@ -19,6 +19,7 @@ export class MessagingService {
    * @param messagingUser
    */
   addUser(messagingUser: IMessagingUser) {
+    this.logService.info("Add new user", messagingUser);
     this.removeClient(messagingUser.client); // remove potential client first
     this.messagingUsers.push(messagingUser);
   }
@@ -28,6 +29,7 @@ export class MessagingService {
    * @param client
    */
   removeClient(client: IClientMessaging) {
+    this.logService.info("Remove client", client);
     this.messagingUsers = this.messagingUsers.filter(e => e.client !== client);
   }
 
@@ -36,6 +38,7 @@ export class MessagingService {
    * @param user
    */
   removeUser(user: number) {
+    this.logService.info("Remove user", { user });
     this.messagingUsers = this.messagingUsers.filter(e => e.user !== user);
   }
 
@@ -48,6 +51,7 @@ export class MessagingService {
     this.messagingUsers.forEach((e) => {
       if (e.client === client) {
         if (!e.subjects.includes(subject)) {
+          this.logService.info("Subscribe to subject", { client, subject });
           e.subjects.push(subject);
         }
       }
@@ -62,6 +66,7 @@ export class MessagingService {
   unsubscribeToSubject(client: IClientMessaging, subject: string) {
     this.messagingUsers.forEach((e) => {
       if (e.client === client) {
+        this.logService.info("Unsubscribe to subject", { client, subject });
         e.subjects = e.subjects.filter(s => s !== subject);
       }
     });
@@ -73,6 +78,7 @@ export class MessagingService {
    * @param message
    */
   sendMessageToClient(to: number[]|'*', subject: string, message: any) {
+    this.logService.info("Send message to client", { to, subject, message });
     let hadSentMessage: boolean = false;
     const users: number[] = isArray(to) ? to : this.getAllUsers();
     this.messagingUsers.forEach((messagingUser: IMessagingUser) => {
